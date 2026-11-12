@@ -1,0 +1,39 @@
+name: CI
+
+# Two jobs. The first runs the reusable workflow on this repository exactly
+# as a project would call it, so the inlined script is exercised for real.
+# The second runs the tests, which prove the check fails when it should. A
+# check that never fails is worse than none, because it looks like a pass.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  house-style:
+    name: House style
+    uses: ./.github/workflows/house-style.yml
+
+  test:
+    name: The check fails when it should
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # The tests make their own em-dash at run time with printf, so this
+      # repository never contains one.
+      - name: Run the tests
+        run: sh tests/check-house-style.test.sh
+
+      - name: Run the check on this repository
+        run: sh scripts/check-house-style.sh
