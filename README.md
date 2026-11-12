@@ -19,6 +19,7 @@ normal, reviewed pull request.
 | `scripts/check-house-style.sh` | The check. Fails if any tracked file contains an em-dash (Unicode U+2014). Plain `sh` and `git grep`, so it needs no Node and works in PHP projects too. |
 | `.github/workflows/house-style.yml` | A reusable GitHub Actions workflow that runs the check. A project calls it from its own CI with one line. |
 | `skills/uk-house-style/SKILL.md` | A Claude Code skill: how to write and review copy in Method7 house style. |
+| `skills/humanise-copy/SKILL.md` | A Claude Code skill: how to edit the habits of AI writing out of copy, such as stock phrases, filler and everything in threes, without changing what it says. |
 | `scripts/sync-workflow.sh` | Copies the check script into the workflow. Only needed when changing the script. |
 | `tests/check-house-style.test.sh` | Proves the check passes on clean files and fails on an em-dash. |
 
