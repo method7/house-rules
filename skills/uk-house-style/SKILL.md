@@ -33,6 +33,7 @@ commit messages. Instead:
 
 - use a spaced en-dash ` – ` for an aside
 - otherwise use a comma, colon or full stop, and often the sentence is better recast
+- use brackets for a true parenthesis
 - use an unspaced en-dash for a range: `2025–2026`
 
 ## Plain English
