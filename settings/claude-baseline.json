@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Bash(git push * main)",
+      "Bash(git push * main *)",
+      "Bash(git push *:main)",
+      "Bash(git push *:main *)",
+      "Bash(git push */main)",
+      "Bash(git push * master)",
+      "Bash(git push * master *)",
+      "Bash(git push *:master)",
+      "Bash(git push *:master *)",
+      "Bash(git push */master)",
+      "Bash(git push --force*)",
+      "Bash(git push * --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git push *+*)",
+
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/Library/Keychains/**)",
+      "Read(//Library/Keychains/**)",
+      "Read(//**/.env)",
+      "Read(.env.*)",
+      "Read(!.env.example)",
+      "Bash(security *)",
+
+      "Bash(sudo *)",
+
+      "Bash(gh pr merge *)",
+      "Bash(gh api *merge*)",
+      "Bash(gh workflow run *)",
+      "Bash(ftp *)",
+      "Bash(sftp *)",
+      "Bash(lftp *)",
+      "Bash(curl *ftp://*)"
+    ],
+    "ask": [
+      "Bash(gh issue comment *)",
+      "Bash(gh pr comment *)",
+      "Bash(gh pr review *)",
+      "Bash(gh release create *)",
+      "Bash(gh api *-X *)",
+      "Bash(gh api *--method *)",
+      "Bash(gh api *-f *)",
+      "Bash(gh api *-F *)",
+      "Bash(gh api *--field *)",
+      "Bash(gh api *--raw-field *)",
+      "Bash(curl *-X *)",
+      "Bash(curl *--request *)",
+      "Bash(curl *-d *)",
+      "Bash(curl *--data*)",
+      "Bash(curl *-F *)",
+      "Bash(curl *--form *)",
+      "Bash(mail *)",
+      "Bash(sendmail *)",
+      "Bash(osascript *)",
+      "mcp__*__*send*",
+      "mcp__*__*post*",
+      "mcp__*__*publish*",
+      "mcp__*__*reply*"
+    ]
+  }
+}
