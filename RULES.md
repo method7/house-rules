@@ -72,8 +72,9 @@ than picking one.
 These rules apply to every AI agent working on a Method7 project. Safety comes
 in three layers. Written rules, such as these and each project's `CLAUDE.md`,
 are followed by the agent itself, so they are advisory. Permission settings
-in `.claude/settings.json` are enforced by Claude Code, and the agent cannot
-override them. Server-side rules, such as branch protection and deploy keys,
+in `.claude/settings.json` are enforced by Claude Code, so the agent cannot
+simply decide to ignore them, though a determined workaround can get round
+them. Server-side rules, such as branch protection and deploy keys,
 are enforced by GitHub.
 
 `settings/claude-baseline.json` is layer 2: a project copies it to

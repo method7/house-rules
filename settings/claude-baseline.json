@@ -36,7 +36,11 @@
       "Bash(ftp *)",
       "Bash(sftp *)",
       "Bash(lftp *)",
-      "Bash(curl *ftp://*)"
+      "Bash(curl *ftp://*)",
+
+      "Edit(//**/.claude/settings.json)",
+      "Edit(//**/.claude/settings.local.json)",
+      "Edit(~/.claude/settings.json)"
     ],
     "ask": [
       "Bash(gh issue comment *)",
