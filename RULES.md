@@ -18,6 +18,7 @@ than picking one.
    Instead use:
    - a spaced en-dash ` – ` (U+2013) for an aside
    - otherwise a comma, colon or full stop
+   - brackets for a true parenthesis
    - an unspaced en-dash for a range: `2025–2026`, `Mon–Fri`, `£5–10`
 
 2. **UK English.** `-ise` not `-ize` (organise, recognise), `colour`,
