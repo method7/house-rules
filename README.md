@@ -253,7 +253,12 @@ testing, against a fake remote and decoy files:
 - `grep -r` over a folder, which reads a `.env` file without naming it
 - `curl --json`, which sends data without `-d` or `-X`
 - a short Python script that edits `.claude/settings.json` itself, which
-  could remove the rules (writing to it with `>>` was stopped for approval)
+  could remove the rules (writing to it with `>>` was stopped for approval).
+  The baseline now denies editing any Claude settings file (an `Edit` rule
+  covers every file-editing tool, Write included), which closes the easy
+  route. A project's CI should also fail if its
+  `.claude/settings.json` differs from this baseline, so a changed copy can
+  never reach `main`; Roofus does this
 
 That is why branch protection on GitHub stays the final lock: it refuses a
 push to `main` however the command was written. The baseline stops the
