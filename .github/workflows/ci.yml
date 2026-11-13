@@ -21,6 +21,9 @@ jobs:
   house-style:
     name: House style
     uses: ./.github/workflows/house-style.yml
+    # The MIT licence is legal text, so it is kept word for word.
+    with:
+      exclude: ":!:LICENSE"
 
   test:
     name: The check fails when it should
@@ -36,4 +39,4 @@ jobs:
         run: sh tests/check-house-style.test.sh
 
       - name: Run the check on this repository
-        run: sh scripts/check-house-style.sh
+        run: sh scripts/check-house-style.sh ':!:LICENSE'
