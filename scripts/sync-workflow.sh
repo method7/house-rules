@@ -3,7 +3,7 @@
 # workflow, between the heredoc markers, so the workflow runs exactly the
 # script a developer runs locally.
 #
-# Run it after any change to the check script, and commit both files.
+# Run it after any change to the check script. Commit both files.
 # tests/check-house-style.test.sh fails if the two copies differ.
 
 set -eu
