@@ -96,7 +96,8 @@ why GitHub stays the final lock.
     `master`. Never force-push.
 
 11. **Private keys and secrets.** Never read `~/.ssh`, `~/.aws`, `~/.gnupg`,
-    macOS keychains or `.env` files. `.env.example` is fine.
+    macOS keychains, `.env` files or key files kept elsewhere, such as
+    `~/.config/roofus/keys.env`. `.env.example` is fine.
 
 12. **No `sudo`.** Never.
 

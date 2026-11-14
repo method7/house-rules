@@ -203,6 +203,8 @@ how an agent opens a pull request.
 | `Read(~/Library/Keychains/**)`, `Read(//Library/Keychains/**)` | The macOS keychain files, for one person and for the whole machine. |
 | `Bash(security *)` | The macOS command that reads passwords out of the keychain. |
 | `Read(//**/.env)` | A `.env` file anywhere on the disk. These hold a project's passwords and keys. |
+| `Read(//**/*.env)` | Any file whose name ends `.env`, anywhere on the disk, such as `keys.env`. Key files are not always called `.env`. |
+| `Read(~/.config/roofus/**)` | Roofus's keys folder, whatever each file in it is called. Its keys live in `~/.config/roofus/keys.env`. |
 | `Read(.env.*)`, then `Read(!.env.example)` | Variants such as `.env.local` and `.env.production`, in the project and every folder below it, except `.env.example`, which holds no real values. The `!` exception only works on rules written without `~/` or `//`, which is why this pair is scoped to the project. |
 
 ### Rule 12: no `sudo`
