@@ -24,6 +24,8 @@
       "Read(~/Library/Keychains/**)",
       "Read(//Library/Keychains/**)",
       "Read(//**/.env)",
+      "Read(//**/*.env)",
+      "Read(~/.config/roofus/**)",
       "Read(.env.*)",
       "Read(!.env.example)",
       "Bash(security *)",
