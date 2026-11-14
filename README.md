@@ -2,27 +2,27 @@
 
 The rules every Method7 project shares, in one place, at a fixed version.
 
-Each project used to keep its own copy of these rules, and the copies drifted
+Each project used to keep its own copy of these rules and the copies drifted
 apart. This repository holds the rules that belong to Method7 as a whole, a
-check that enforces the main one, and a skill that teaches an AI agent the
+check that enforces the main one and a skill that teaches an AI agent the
 house style. Each project's own product rules stay in that project.
 
 It follows the same pattern as `method7/discoverable`: a project uses one exact
-commit, needs no password to get it, and only moves to a newer one through a
+commit, needs no password to get it and only moves to a newer one through a
 normal, reviewed pull request.
 
 ## What is in it
 
 | File | What it is for |
 | --- | --- |
-| `RULES.md` | The general rules: UK English, dates, the em-dash ban and what replaces it, plain English, the CI and security baseline, and the safety rules for AI agents. Short enough to read in two minutes. |
+| `RULES.md` | The general rules: UK English, dates, the em-dash and comma-before-"and" bans and what replaces them, plain English, the CI and security baseline and the safety rules for AI agents. Short enough to read in two minutes. |
 | `settings/claude-baseline.json` | The agent safety rules as Claude Code permission settings, so Claude Code enforces them rather than leaving them to the agent. A project copies it to `.claude/settings.json`. Each rule is explained [below](#the-permission-baseline). |
-| `scripts/check-house-style.sh` | The check. Fails if any tracked file contains an em-dash (Unicode U+2014). Plain `sh` and `git grep`, so it needs no Node and works in PHP projects too. |
+| `scripts/check-house-style.sh` | The check. Fails if any tracked file contains an em-dash (Unicode U+2014), a comma before "and" or a sentence starting with "And". Plain `sh` and `git grep`, so it needs no Node and works in PHP projects too. |
 | `.github/workflows/house-style.yml` | A reusable GitHub Actions workflow that runs the check. A project calls it from its own CI with one line. |
 | `skills/uk-house-style/SKILL.md` | A Claude Code skill: how to write and review copy in Method7 house style. |
 | `skills/humanise-copy/SKILL.md` | A Claude Code skill: how to edit the habits of AI writing out of copy, such as stock phrases, filler and everything in threes, without changing what it says. |
 | `scripts/sync-workflow.sh` | Copies the check script into the workflow. Only needed when changing the script. |
-| `tests/check-house-style.test.sh` | Proves the check passes on clean files and fails on an em-dash. |
+| `tests/check-house-style.test.sh` | Proves the check passes on clean files and fails on each thing it bans. |
 
 A few terms. **CI** (continuous integration) is the set of automatic checks
 GitHub runs on every proposed change before it can be merged. A **reusable
@@ -32,7 +32,7 @@ repository, such as `3d3c42e5aac5ba805825da76410c181273ba90b1`.
 
 ## Adopting it in a project
 
-Use one commit for everything, and always the full 40-character SHA. A branch
+Use one commit for everything and always the full 40-character SHA. A branch
 name such as `main` would change under you without a review.
 
 ```sh
@@ -67,7 +67,8 @@ The workflow holds no secrets and only reads the repository, so it is safe on
 pull requests from anyone. Leave out `with:` to check every tracked file.
 
 Excludes are for code the project does not own or will not change, such as an
-archived old site or a vendored library. They are not a way round the rule
+archived old site, a vendored library or a `LICENSE` file, whose legal
+wording must stay exactly as written. They are not a way round the rule
 for new work.
 
 ### 2. Copy the rules and pull them into `CLAUDE.md`
@@ -113,7 +114,7 @@ instead, keeping every `deny` and `ask` rule from the baseline. Check that
 `.gitignore` lists `.claude/settings.local.json`, so each person's own
 settings stay out of the repository (rule 9).
 
-The skills and the baseline come from the same commit as the rules, and the
+The skills and the baseline come from the same commit as the rules and the
 comment in `.claude/house-rules.md` says so, so one line records the version
 of everything.
 
@@ -162,17 +163,17 @@ against Claude Code 2.1.311. (The older `docs.claude.com/en/docs/claude-code/`
 pages now redirect to `code.claude.com`.) The points that matter here:
 
 - **`deny`** blocks an action outright. **`ask`** stops and asks a person
-  first. Claude Code checks `deny`, then `ask`, then `allow`, and a broader
+  first. Claude Code checks `deny`, then `ask`, then `allow`. A broader
   `deny` always beats a narrower `allow`, in any settings file. So a
   project or a person can add rules on top of the baseline, but cannot
   switch one of its rules off.
 - **`Bash(...)`** matches the command as written. `*` stands for any text,
   spaces included. Commands joined with `&&`, `;` or `|` are checked one by
-  one, and a few wrappers such as `timeout` and `nohup` are looked through.
+  one and a few wrappers such as `timeout` and `nohup` are looked through.
 - **`Read(...)`** uses the same patterns as a `.gitignore` file. `~/` starts
   at the home folder and `//` at the root of the disk. `*` stays within one
   folder and `**` reaches into every folder below. A `Read` deny also stops
-  the agent editing that path, and stops common file commands in Bash such
+  the agent editing that path and stops common file commands in Bash such
   as `cat` and `head`.
 - **`mcp__*__*send*`** is a pattern over tool names: any tool from any
   connected service (an MCP server) whose name contains `send`.
@@ -240,8 +241,8 @@ It stays a written rule.
 ### What the baseline does not stop
 
 Deny rules match the command as it is written, so they are guardrails, not a
-vault. The documentation says so, and tests in Roofus (decision 0012)
-confirmed it: every rule held for the command as normally written, and each
+vault. The documentation says so and tests in Roofus (decision 0012)
+confirmed it: every rule held for the command as normally written and each
 gave way to the same thing written another way. These got through in
 testing, against a fake remote and decoy files:
 
@@ -262,7 +263,7 @@ testing, against a fake remote and decoy files:
 
 That is why branch protection on GitHub stays the final lock: it refuses a
 push to `main` however the command was written. The baseline stops the
-mistakes an agent is likely to make, and makes a deliberate workaround stand
+mistakes an agent is likely to make and makes a deliberate workaround stand
 out in the transcript. The settings file is tracked by git, so a change to
 it shows in the pull request's diff. Adding a pattern for every spelling
 would never end. For a stronger wall around files and the network, Claude
@@ -280,7 +281,7 @@ Change them here, by pull request, never in a project's copy.
 - Run `sh tests/check-house-style.test.sh` before pushing. It needs only `sh`
   and `git`.
 
-This repository follows its own rules: its CI runs the check on itself, and
+This repository follows its own rules: its CI runs the check on itself and
 the tests create their em-dash at run time so the repository never contains
 one.
 
@@ -292,12 +293,12 @@ downloading it.
 The alternative was a second checkout of this repository from inside the
 workflow. The difficulty is knowing which commit to check out: a reusable
 workflow cannot reliably tell which commit its caller pinned, so each project
-would have to repeat the SHA in a second setting, and the two could drift
+would have to repeat the SHA in a second setting and the two could drift
 apart without anyone noticing. It would also fail for as long as this
 repository is private.
 
 Carried inside the workflow, the script is always the one from the commit the
-project pinned, and nothing extra is fetched. The cost is keeping two copies
+project pinned and nothing extra is fetched. The cost is keeping two copies
 in step, which `scripts/sync-workflow.sh` does and CI enforces, so the
 workflow still runs exactly the script a developer runs on a laptop.
 

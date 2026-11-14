@@ -1,7 +1,7 @@
 <!--
 Copied from method7/house-rules at commit <commit SHA>, as were
 .claude/skills/uk-house-style/SKILL.md, .claude/skills/humanise-copy/SKILL.md
-and .claude/settings.json (from settings/claude-baseline.json), and the
+and .claude/settings.json (from settings/claude-baseline.json) and the
 house-style workflow is called at the same commit. Do not edit these copies:
 change method7/house-rules, then re-copy all four files and move the workflow
 to the new commit.
@@ -23,6 +23,12 @@ than picking one.
    - brackets for a true parenthesis
    - an unspaced en-dash for a range: `2025–2026`, `Mon–Fri`, `£5–10`
 
+   **No comma before "and", anywhere either.** The "and" already joins the
+   words, so the comma adds nothing. In a list, write `red, green and blue`.
+   Between two sentences, drop the comma or end the first sentence. Never
+   start a sentence with "And". Legal text that must stay word for word,
+   such as a licence, is excluded from the check.
+
 2. **UK English.** `-ise` not `-ize` (organise, recognise), `colour`,
    `behaviour`, `centre`. `licence` is the noun, `license` the verb. Code may
    still use US spellings where a language or library needs them (`color` in
@@ -33,7 +39,7 @@ than picking one.
    ISO: `2026-11-12`.
 
 4. **Plain English.** Write for business owners, not engineers. Prefer the
-   short word, say who did what, and explain a technical term the first time
+   short word, say who did what and explain a technical term the first time
    it appears, or leave it out.
 
 ## Checking
@@ -44,9 +50,12 @@ than picking one.
    git grep -nIP '\x{2014}'
    ```
 
-   It should print nothing. Use `git grep`, not `grep`: macOS `grep` has no
-   `-P`, and a command that fails to run prints nothing, which looks exactly
-   like a pass. CI runs the same check through the shared `house-style`
+   It should print nothing. The comma check needs the script, because a
+   comma at the end of one line and "and" at the start of the next is the
+   same mistake: `sh scripts/check-house-style.sh` in this repository, or
+   the copy fetched as the README describes. Use `git grep`, not `grep`:
+   macOS `grep` has no `-P`. A command that fails to run prints nothing,
+   which looks exactly like a pass. CI runs the same check through the shared `house-style`
    workflow and fails the build if it finds one.
 
 ## CI and security
@@ -58,7 +67,7 @@ than picking one.
    cannot read.
 
 7. **Read-only token.** Every workflow sets `permissions: contents: read` at
-   the top, and grants more to a single job only when that job needs it.
+   the top and grants more to a single job only when that job needs it.
 
 8. **Cancel stale checks, never a deploy.** CI cancels a run that a newer
    push has replaced. A deploy is queued, never cancelled part way through.
@@ -78,20 +87,20 @@ them. Server-side rules, such as branch protection and deploy keys,
 are enforced by GitHub.
 
 `settings/claude-baseline.json` is layer 2: a project copies it to
-`.claude/settings.json`, and it blocks the commands that break rules 10–13
+`.claude/settings.json`. It blocks the commands that break rules 10–13
 and asks first for the ones it can recognise under rule 14. It matches
 commands by how they are written, so it is a guardrail, not a vault. That is
 why GitHub stays the final lock.
 
 10. **Pushing.** An agent may push its own branch. Never to `main` or
-    `master`, and never force-push.
+    `master`. Never force-push.
 
 11. **Private keys and secrets.** Never read `~/.ssh`, `~/.aws`, `~/.gnupg`,
     macOS keychains or `.env` files. `.env.example` is fine.
 
 12. **No `sudo`.** Never.
 
-13. **No merging, deploying or FTP.** Never. Simon merges, and merges deploy.
+13. **No merging, deploying or FTP.** Never. Simon merges. Merging deploys.
 
 14. **Ask before acting outward.** Before sending email or messages,
     posting, making payments or changing live data, always ask Simon first.

@@ -1,6 +1,6 @@
 ---
 name: uk-house-style
-description: Method7 house style for copy that people will read and that gets published or sent - journal entries, website pages, guides, blog posts, emails, case studies, social posts, and README or pull-request text a client may see. Use when drafting, editing or reviewing that kind of prose. Its spelling and voice rules are not for code, identifiers or config, but the em-dash ban applies everywhere, code comments and commit messages included.
+description: Method7 house style for copy that people will read and that gets published or sent - journal entries, website pages, guides, blog posts, emails, case studies, social posts and README or pull-request text a client may see. Use when drafting, editing or reviewing that kind of prose. Its spelling and voice rules are not for code, identifiers or config, but the em-dash ban applies everywhere, code comments and commit messages included.
 ---
 
 # UK house style
@@ -28,13 +28,22 @@ knowledgeable person talking plainly, in British English.
 ## Punctuation: no em-dashes
 
 Never use the em-dash (U+2014). It is the most recognisable mark of
-AI-written copy, and Method7 bans it everywhere: copy, code comments and
+AI-written copy. Method7 bans it everywhere: copy, code comments and
 commit messages. Instead:
 
 - use a spaced en-dash ` – ` for an aside
-- otherwise use a comma, colon or full stop, and often the sentence is better recast
+- otherwise use a comma, colon or full stop; often the sentence is better recast
 - use brackets for a true parenthesis
 - use an unspaced en-dash for a range: `2025–2026`
+
+## Punctuation: no comma before "and"
+
+Never put a comma before "and". The "and" already joins the words, so the
+comma adds nothing. Never start a sentence with "And" either.
+
+- In a list, drop the comma: `red, green and blue`.
+- Between two sentences, drop the comma or end the first sentence.
+- Don't fix a sentence by starting the next one with "And". Recast it.
 
 ## Plain English
 
@@ -49,15 +58,18 @@ commit messages. Instead:
 
 (The real character is left out on purpose, so this file passes its own check.)
 
-> After: We split the work into small tasks so an AI agent can take each one on its own. It's quicker, and every step is easy to check.
+> After: We split the work into small tasks so an AI agent can take each one on its own. It's quicker and every step is easy to check.
 
 ## Final check
 
-Before handing copy back, check it for the em-dash character. In a git repo:
+Before handing copy back, check it for the em-dash character and for a
+comma before "and". In a git repo:
 
 ```bash
 git grep -nIP '\x{2014}'
+git grep -nIE ',[[:space:]]*and([^[:alnum:]_]|$)'
 ```
 
-That should print nothing. CI runs the same check on every pull request, so
-this catches it early rather than at review.
+Both should print nothing. CI runs the full check on every pull request. It
+also catches two things these lines miss: a comma at the end of one line
+with "and" starting the next, or a sentence that starts with "And".
