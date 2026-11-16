@@ -159,8 +159,8 @@ past them. JSON has no comments, so this section explains each rule.
 
 The syntax follows Claude Code's own documentation, "Configure permissions"
 at https://code.claude.com/docs/en/permissions, checked on 12 November 2026
-against Claude Code 2.1.311 and again for the private data rules on
-16 November 2026, still against Claude Code 2.1.311. (The older
+against Claude Code 2.1.311. The private data rules were checked on 16 November
+2026 against the same version. (The older
 `docs.claude.com/en/docs/claude-code/` pages now redirect to
 `code.claude.com`.) The points that matter here:
 
@@ -213,15 +213,12 @@ how an agent opens a pull request.
 | `Read(//**/*.env)` | Any file whose name ends `.env`, anywhere on the disk, such as `keys.env`. Key files are not always called `.env`. |
 | `Read(~/.config/roofus/**)` | Roofus's keys folder, whatever each file in it is called. Its keys live in `~/.config/roofus/keys.env`. |
 | `Read(.env.*)`, then `Read(!.env.example)` | Variants such as `.env.local` and `.env.production`, in the project and every folder below it, except `.env.example`, which holds no real values. The `!` exception only works on rules written without `~/` or `//`, which is why this pair is scoped to the project. |
-| `Read(//**/*-private)`, `Read(//**/*-private/**)` | A project's private data folder and everything in it, anywhere on the disk, such as Roofus's prospect data in `roofus-private`. By convention a project keeps its private data in a folder named `<project>-private` beside its repository, never in git. The first rule names the folder itself, so a search or listing aimed at the folder is refused too; the second covers every file and folder inside it. It also blocks any other file or folder whose name ends in `-private`. |
-| `Edit(//**/*-private/**)` | Changing anything in a private data folder. The `Read` deny already stops Claude Code's edit and write tools, but not its notebook editing tool, so this closes that gap. |
+| `Read(//**/*-private)`, `Read(//**/*-private/**)` | A project's private data folder, named `<project>-private` beside its repository, such as Roofus's prospect data in `roofus-private`. The first rule is the folder itself, so a search or listing aimed at it is refused; the second is everything inside. Any other file or folder whose name ends in `-private` is blocked too. |
+| `Edit(//**/*-private/**)` | Changing anything there with the notebook editing tool, which the `Read` deny doesn't cover. |
 
-These rules stop Claude Code's own file tools and the common file commands
-it recognises in Bash, such as `cat`, `head` and `sed`. They do not stop a
-program that opens the files itself. That is deliberate: a project's own
-tools, such as Roofus's leads agent run with `python3 -m agents.leads`,
-still read and write their data there. They also do not stop `grep -r` run
-from a folder above, which reads files without naming them.
+A program that opens the files itself is not stopped. That is
+deliberate: a project's own tools, such as Roofus's leads agent, still read
+and write their data there.
 
 They apply to every Claude Code session in a project that uses the
 baseline, Simon's own included. So Simon looks at private files directly,
