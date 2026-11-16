@@ -28,6 +28,9 @@
       "Read(~/.config/roofus/**)",
       "Read(.env.*)",
       "Read(!.env.example)",
+      "Read(//**/*-private)",
+      "Read(//**/*-private/**)",
+      "Edit(//**/*-private/**)",
       "Bash(security *)",
 
       "Bash(sudo *)",

@@ -95,9 +95,12 @@ why GitHub stays the final lock.
 10. **Pushing.** An agent may push its own branch. Never to `main` or
     `master`. Never force-push.
 
-11. **Private keys and secrets.** Never read `~/.ssh`, `~/.aws`, `~/.gnupg`,
-    macOS keychains, `.env` files or key files kept elsewhere, such as
-    `~/.config/roofus/keys.env`. `.env.example` is fine.
+11. **Private keys, secrets and private data.** Never read `~/.ssh`,
+    `~/.aws`, `~/.gnupg`, macOS keychains, `.env` files, key files kept
+    elsewhere, such as `~/.config/roofus/keys.env`, or a project's private
+    data folder. `.env.example` is fine. A project's private data lives in a
+    folder named `<project>-private` beside its repository, never inside it
+    and never in git.
 
 12. **No `sudo`.** Never.
 

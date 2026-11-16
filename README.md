@@ -159,8 +159,10 @@ past them. JSON has no comments, so this section explains each rule.
 
 The syntax follows Claude Code's own documentation, "Configure permissions"
 at https://code.claude.com/docs/en/permissions, checked on 12 November 2026
-against Claude Code 2.1.311. (The older `docs.claude.com/en/docs/claude-code/`
-pages now redirect to `code.claude.com`.) The points that matter here:
+against Claude Code 2.1.311. The private data rules were checked on 16 November
+2026 against the same version. (The older
+`docs.claude.com/en/docs/claude-code/` pages now redirect to
+`code.claude.com`.) The points that matter here:
 
 - **`deny`** blocks an action outright. **`ask`** stops and asks a person
   first. Claude Code checks `deny`, then `ask`, then `allow`. A broader
@@ -173,8 +175,13 @@ pages now redirect to `code.claude.com`.) The points that matter here:
 - **`Read(...)`** uses the same patterns as a `.gitignore` file. `~/` starts
   at the home folder and `//` at the root of the disk. `*` stays within one
   folder and `**` reaches into every folder below. A `Read` deny also stops
-  the agent editing that path and stops common file commands in Bash such
-  as `cat` and `head`.
+  the agent editing or writing that path and stops common file commands in
+  Bash such as `cat` and `head`. It does not stop the notebook editing tool,
+  so a path no tool may change needs an `Edit` deny as well. Claude Code
+  makes what it calls "a best-effort attempt" to apply a `Read` deny to its
+  search tools too, Grep (searching inside files) and Glob (listing files
+  by name). It does not apply to a command that reads files without naming
+  them, such as `grep -r`, or to a script that opens files itself.
 - **`mcp__*__*send*`** is a pattern over tool names: any tool from any
   connected service (an MCP server) whose name contains `send`.
 
@@ -206,6 +213,17 @@ how an agent opens a pull request.
 | `Read(//**/*.env)` | Any file whose name ends `.env`, anywhere on the disk, such as `keys.env`. Key files are not always called `.env`. |
 | `Read(~/.config/roofus/**)` | Roofus's keys folder, whatever each file in it is called. Its keys live in `~/.config/roofus/keys.env`. |
 | `Read(.env.*)`, then `Read(!.env.example)` | Variants such as `.env.local` and `.env.production`, in the project and every folder below it, except `.env.example`, which holds no real values. The `!` exception only works on rules written without `~/` or `//`, which is why this pair is scoped to the project. |
+| `Read(//**/*-private)`, `Read(//**/*-private/**)` | A project's private data folder, named `<project>-private` beside its repository, such as Roofus's prospect data in `roofus-private`. The first rule is the folder itself, so a search or listing aimed at it is refused; the second is everything inside. Any other file or folder whose name ends in `-private` is blocked too. |
+| `Edit(//**/*-private/**)` | Changing anything there with the notebook editing tool, which the `Read` deny doesn't cover. |
+
+A program that opens the files itself is not stopped. That is
+deliberate: a project's own tools, such as Roofus's leads agent, still read
+and write their data there.
+
+They apply to every Claude Code session in a project that uses the
+baseline, Simon's own included. So Simon looks at private files directly,
+by opening them in a browser or an editor, rather than asking Claude to
+read them.
 
 ### Rule 12: no `sudo`
 
@@ -252,7 +270,8 @@ testing, against a fake remote and decoy files:
 - `git push origin HEAD` while on `main`, which never names the branch
 - a command wrapped in `sh -c '...'` or `bash -c '...'`, for `sudo` and
   `gh pr merge` alike
-- a short Python script that opens a key file itself
+- a short Python script that opens a key file itself (the same goes for a
+  private data folder)
 - `grep -r` over a folder, which reads a `.env` file without naming it
 - `curl --json`, which sends data without `-d` or `-X`
 - a short Python script that edits `.claude/settings.json` itself, which
